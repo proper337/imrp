@@ -1,0 +1,54 @@
+<project name="HadoopCookbook" default="build" basedir=".">
+	<description>
+        simple example build file
+    </description>
+	<!-- set global properties for this build -->
+	<property name="src" location="src" />
+	<property name="build" location="build" />
+	<property name="hadoop.home" location="/home/pkeni/.m2/repository/org/apache/hadoop/hadoop-core/1.1.0" />
+	<property name="commons.cli.home" location="/home/pkeni/.m2/repository/commons-cli/commons-cli/1.2" />
+	<property name="commons.logging.home" location="/home/pkeni/.m2/repository/commons-logging/commons-logging/1.1" />
+	<property name="commons.logging.api.home" location="/home/pkeni/.m2/repository/commons-logging/commons-logging-api/1.1" />
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/classes" />
+
+	</target>
+
+	<target name="compile" depends="init" description="compile the source ">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src}" destdir="${build}/classes" includeantruntime="false">
+			<classpath>
+				<fileset dir="${hadoop.home}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${commons.cli.home}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${commons.logging.home}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${commons.logging.api.home}">
+					<include name="**/*.jar" />
+				</fileset>
+				<!-- <fileset dir="${hadoop.home}"> -->
+				<!-- 	<include name="hadoop-core-*.jar" /> -->
+				<!-- </fileset> -->
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="build" depends="compile" description="generate the distribution">
+		<!-- Build the jar file -->
+		<jar jarfile="${build}/lib/hadoop-microbook.jar" basedir="${build}/classes" />
+	</target>
+
+	<target name="clean" description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}" />
+	</target>
+</project>
